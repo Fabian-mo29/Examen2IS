@@ -5,9 +5,9 @@ namespace back_end.Domain
     public class Payment
     {
         [Required]
-        public List<CashUnit> CashUnits { get; set; }
+        public List<CashUnit> cashUnits { get; set; }
 
         [Required]
-        public List<Soda> Sodas { get; set; }
+        public List<Soda> sodas { get; set; }
     }
 }

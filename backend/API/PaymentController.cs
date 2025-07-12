@@ -16,11 +16,11 @@ namespace back_end.API
         }
 
         [HttpPost]
-        public ActionResult<List<CashUnit>> Create()
+        public ActionResult<List<CashUnit>> Create([FromBody] Payment payment)
         {
             try
             {
-                var cashUnits = _paymentCommand.Create();
+                var cashUnits = _paymentCommand.Create(payment);
                 return Ok(cashUnits);
             }
             catch (Exception ex)

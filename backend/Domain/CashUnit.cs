@@ -8,6 +8,6 @@ namespace back_end.Domain
         public int value { get; set; }
 
         [Required]
-        public int stock { get; set; }
+        public int quantity { get; set; }
     }
 }

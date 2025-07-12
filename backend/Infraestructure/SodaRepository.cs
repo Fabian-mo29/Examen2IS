@@ -10,34 +10,34 @@ namespace back_end.Infraestructure
         {
             this._sodas = new List<Soda>
             {
-                new Soda { name = "Coca Cola", price = 800, stock = 10 },
-                new Soda { name = "Pepsi", price = 750, stock = 8 },
-                new Soda { name = "Fanta", price = 950, stock = 10 },
-                new Soda { name = "Sprite", price = 975, stock = 15 },
+                new Soda { name = "Coca Cola", price = 800, quantity = 10 },
+                new Soda { name = "Pepsi", price = 750, quantity = 8 },
+                new Soda { name = "Fanta", price = 950, quantity = 10 },
+                new Soda { name = "Sprite", price = 975, quantity = 15 },
             };
         }
 
-        public List<Soda> GetAllSodas()
+        public List<Soda> GetAll()
         {
             return this._sodas;
         }
 
-        public void DecreaseStock(string sodaName, int quantity)
+        public void DecreaseQuantity(string sodaName, int quantity)
         {
             try {
                 var soda = this._sodas.FirstOrDefault(s => s.name == sodaName);
                 if (soda != null)
                 {
-                    if (soda.stock < quantity)
+                    if (soda.quantity < quantity)
                     {
-                        throw new InvalidOperationException($"Not enough stock available for {sodaName}.");
+                        throw new InvalidOperationException($"Not enough quantity available for {sodaName}.");
                     }
-                    soda.stock -= quantity;
+                    soda.quantity -= quantity;
                 }
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred while decreasing soda stock.");
+                throw new ApplicationException("An error occurred while decreasing soda quantity.");
             }
         }
 

@@ -9,29 +9,29 @@ namespace back_end.Infraestructure
         public CashUnitRepository()
         {
             this._cashUnits = new List<CashUnit>(){
-                new CashUnit { value = 1000, stock = 0 },
-                new CashUnit { value = 500, stock = 20 },
-                new CashUnit { value = 100, stock = 30 },
-                new CashUnit { value = 50, stock = 50 },
-                new CashUnit { value = 25, stock = 25 }
+                new CashUnit { value = 1000, quantity = 0 },
+                new CashUnit { value = 500, quantity = 20 },
+                new CashUnit { value = 100, quantity = 30 },
+                new CashUnit { value = 50, quantity = 50 },
+                new CashUnit { value = 25, quantity = 25 }
             };
         }
 
-        public List<CashUnit> GetAllCashUnits()
+        public List<CashUnit> GetAll()
         {
             return _cashUnits;
         }
 
-        public void UpdateStock(int value, int modification)
+        public void UpdateQuantity(int value, int modification)
         {
             var cashUnit = _cashUnits.FirstOrDefault(cu => cu.value == value);
             if (cashUnit != null)
             {
-                if (cashUnit.stock + modification < 0)
+                if (cashUnit.quantity + modification < 0)
                 {
-                    throw new InvalidOperationException($"Stock insufficient for {cashUnit.value}.");
+                    throw new InvalidOperationException($"Insufficient quantity for {cashUnit.value}.");
                 }
-                cashUnit.stock += modification;
+                cashUnit.quantity += modification;
             }
         }
 

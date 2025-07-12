@@ -4,6 +4,6 @@ namespace back_end.Application
 {
     public interface IPaymentCommand
     {
-        public List<CashUnit> Create();
+        public List<CashUnit> Create(Payment payment);
     }
 }

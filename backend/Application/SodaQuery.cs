@@ -12,10 +12,10 @@ namespace back_end.Application
             this._sodaRepository = sodaRepository;
         }
 
-        public List<Soda> GetAllSodas()
+        public List<Soda> GetAll()
         {
             try {
-                return this._sodaRepository.GetAllSodas();
+                return this._sodaRepository.GetAll();
             }
             catch (Exception ex)
             {

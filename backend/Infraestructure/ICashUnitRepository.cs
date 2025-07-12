@@ -4,7 +4,7 @@ namespace back_end.Infraestructure
 {
     public interface ICashUnitRepository
     {
-        public List<CashUnit> GetAllCashUnits();
-        public void UpdateStock(int value, int modification);
+        public List<CashUnit> GetAll();
+        public void UpdateQuantity(int value, int modification);
     }
 }

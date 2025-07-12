@@ -11,6 +11,6 @@ namespace back_end.Domain
         public int price { get; set; }
 
         [Required]
-        public int stock { get; set; }
+        public int quantity { get; set; }
     }
 }

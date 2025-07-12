@@ -2,12 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace back_end.Domain
 {
-    public class Soda
+    public class CashUnit
     {
         [Required]
-        public String name { get; set; }
-    
-        public int? price { get; set; }
+        public int value { get; set; }
 
         [Required]
         public int quantity { get; set; }

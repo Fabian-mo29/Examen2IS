@@ -20,7 +20,7 @@ namespace back_end.API
         {
             try
             {
-                var sodas = _sodaQuery.GetAllSodas();
+                var sodas = _sodaQuery.GetAll();
                 return Ok(sodas);
             }
             catch (Exception ex)

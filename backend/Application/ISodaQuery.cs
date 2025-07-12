@@ -4,6 +4,6 @@ namespace back_end.Application
 {
     public interface ISodaQuery
     {
-        public List<Soda> GetAllSodas();
+        public List<Soda> GetAll();
     }
 }

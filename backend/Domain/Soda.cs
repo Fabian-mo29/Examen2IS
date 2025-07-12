@@ -7,8 +7,7 @@ namespace back_end.Domain
         [Required]
         public String name { get; set; }
     
-        [Required]
-        public int price { get; set; }
+        public int? price { get; set; }
 
         [Required]
         public int quantity { get; set; }

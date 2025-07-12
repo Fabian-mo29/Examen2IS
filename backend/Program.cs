@@ -28,10 +28,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Dependency Injection
-builder.Services.AddScoped<ISodaRepository, SodaRepository>();
+builder.Services.AddSingleton<ISodaRepository, SodaRepository>();
 builder.Services.AddScoped<ISodaQuery,  SodaQuery>();
 builder.Services.AddScoped<IPaymentCommand, PaymentCommand>();
-builder.Services.AddScoped<ICashUnitRepository, CashUnitRepository>();
+builder.Services.AddSingleton<ICashUnitRepository, CashUnitRepository>();
 
 var app = builder.Build();
 

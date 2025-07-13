@@ -44,11 +44,32 @@
       </div>
     </div>
 
-    <!-- Unidades de pago y Resumen -->
+    <!-- Carrito actual -->
+    <h2 class="h4 mb-3"><strong>Carrito actual</strong></h2>
+    <div
+      v-if="cart.length > 0"
+      class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-4"
+    >
+      <div v-for="item in cart" :key="item.name" class="col">
+        <div class="card h-100 bg-white">
+          <div class="card-body">
+            <h5 class="card-title">
+              <strong>{{ item.name }}</strong>
+            </h5>
+            <p class="mb-1">Cantidad: {{ item.quantity }}</p>
+            <p class="mb-0">Subtotal: ₡{{ item.quantity * item.price }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <p>No hay bebidas seleccionadas</p>
+    </div>
+
+    <!-- Unidades de pago y resumen -->
     <h2 class="h4 mb-3"><strong>Unidades de pago</strong></h2>
     <div class="row">
-      <!-- Grid de unidades -->
-      <div class="col-md-9 mb-3">
+      <div class="col-md-9">
         <div class="row g-3">
           <div
             class="col-6 col-sm-4 col-md-3 col-lg-2"
@@ -70,17 +91,26 @@
         </div>
       </div>
 
-      <!-- Resumen -->
+      <!-- Resumen a la derecha -->
       <div class="col-md-3">
         <div class="card p-3 bg-light h-100">
-          <p class="mb-2">
-            <strong>Total en bebidas seleccionadas:</strong> ₡{{ cartTotal }}
-          </p>
+          <p class="mb-2"><strong>Precio Total:</strong> ₡{{ cartTotal }}</p>
           <p>
             <strong>Total insertado por el usuario:</strong> ₡{{
               insertedAmount
             }}
           </p>
+          <button
+            class="btn btn-sm flex-grow-1"
+            :class="
+              insertedAmount >= cartTotal && cartTotal > 0
+                ? 'btn-success'
+                : 'btn-secondary'
+            "
+            :disabled="insertedAmount < cartTotal || cartTotal === 0"
+          >
+            Comprar
+          </button>
         </div>
       </div>
     </div>
@@ -93,6 +123,7 @@ export default {
   data() {
     return {
       sodas: [],
+      cart: [],
       cartTotal: 0,
       cashUnits: [
         { label: "₡25", value: 25, quantity: 0 },
@@ -105,9 +136,10 @@ export default {
   },
   computed: {
     insertedAmount() {
-      return this.cashUnits.reduce((sum, unit) => {
-        return sum + unit.quantity * unit.value;
-      }, 0);
+      return this.cashUnits.reduce(
+        (sum, unit) => sum + unit.quantity * unit.value,
+        0
+      );
     },
   },
   methods: {
@@ -124,17 +156,32 @@ export default {
     },
     addToCart(soda) {
       if (soda.selectedQty > 0 && soda.selectedQty <= soda.quantity) {
+        const existing = this.cart.find((item) => item.name === soda.name);
+        if (existing) {
+          existing.quantity += soda.selectedQty;
+        } else {
+          this.cart.push({
+            name: soda.name,
+            price: soda.price,
+            quantity: soda.selectedQty,
+          });
+        }
         this.cartTotal += soda.selectedQty * soda.price;
         soda.quantity -= soda.selectedQty;
         soda.selectedQty = 0;
       }
     },
     getImage(sodaName) {
-      if (sodaName === "Pepsi") return "pepsi.png";
-      if (sodaName === "Coca Cola") return "cocacola.png";
-      if (sodaName === "Fanta") return "fanta.png";
-      if (sodaName === "Sprite") return "sprite.png";
-      return "default.png";
+      switch (sodaName) {
+        case "Pepsi":
+          return "pepsi.png";
+        case "Coca Cola":
+          return "cocacola.png";
+        case "Fanta":
+          return "fanta.png";
+        case "Sprite":
+          return "sprite.png";
+      }
     },
   },
   mounted() {

@@ -66,6 +66,22 @@
       <p>No hay bebidas seleccionadas</p>
     </div>
 
+    <!-- Mensajes de alerta -->
+    <div
+      v-if="paymentSuccess === true"
+      class="alert alert-success"
+      role="alert"
+    >
+      Pago completado exitosamente.
+    </div>
+    <div
+      v-else-if="paymentSuccess === false"
+      class="alert alert-danger"
+      role="alert"
+    >
+      {{ paymentErrorMessage }}
+    </div>
+
     <!-- Unidades de pago y resumen -->
     <h2 class="h4 mb-3"><strong>Unidades de pago</strong></h2>
     <div class="row">
@@ -150,6 +166,8 @@ export default {
         { label: "₡1000", value: 1000, quantity: 0 },
       ],
       change: [],
+      paymentSuccess: null,
+      paymentErrorMessage: "",
     };
   },
   computed: {
@@ -223,8 +241,13 @@ export default {
       try {
         const response = await this.$api.completePayment(payment);
         this.change = response.data;
+        this.paymentSuccess = true;
+        this.paymentErrorMessage = "";
       } catch (error) {
-        console.error("Error creating payment.", error);
+        this.paymentSuccess = false;
+        const message =
+          error?.response?.data?.details || "Ocurrió un error inesperado.";
+        this.paymentErrorMessage = message;
       }
     },
   },

@@ -59,6 +59,12 @@ namespace back_end.Application
             {
                 throw new InvalidOperationException("Requested sodas are not available.");
             }
+            
+            var sodaWithNotEnoughStock = areSodaStocksEnoughForPayment(payment, availableSodas);
+            if (sodaWithNotEnoughStock != null)
+            {
+                throw new InvalidOperationException($"Requested quantity for {sodaWithNotEnoughStock} is greater than the current stocks.");
+            }
         }
 
         private bool areCashUnitsValid(Payment payment, List<CashUnit> validCashUnits)
@@ -79,6 +85,19 @@ namespace back_end.Application
             }
 
             return payment.sodas.All(s => availableSodas.Any(av => av.name == s.name));
+        }
+
+        private String? areSodaStocksEnoughForPayment(Payment payment, List<Soda> availableSodas)
+        {
+            foreach (var soda in payment.sodas)
+            {
+                var availableSoda = availableSodas.FirstOrDefault(s => s.name.Contains(soda.name));
+                if (soda.quantity > availableSoda.quantity)
+                {
+                    return soda.name;
+                }
+            }
+            return null;
         }
 
         private int calculateChange(Payment payment, List<CashUnit> cashUnitsForChangeCalc, List<Soda> availableSodas)

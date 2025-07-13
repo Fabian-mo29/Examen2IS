@@ -45,7 +45,7 @@
     </div>
 
     <!-- Carrito actual -->
-    <h2 class="h4 mb-3"><strong>Carrito actual</strong></h2>
+    <h2 class="h4 mb-3"><strong>Bebidas seleccionadas</strong></h2>
     <div
       v-if="cart.length > 0"
       class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-4"
@@ -91,7 +91,7 @@
         </div>
       </div>
 
-      <!-- Resumen a la derecha -->
+      <!-- Resumen de total de pago -->
       <div class="col-md-3">
         <div class="card p-3 bg-light h-100">
           <p class="mb-2"><strong>Precio Total:</strong> ₡{{ cartTotal }}</p>
@@ -108,9 +108,26 @@
                 : 'btn-secondary'
             "
             :disabled="insertedAmount < cartTotal || cartTotal === 0"
+            @click="createPaymentRequest"
           >
             Comprar
           </button>
+        </div>
+      </div>
+
+      <!-- Desglose de vuelto -->
+      <div v-if="filteredChange.length > 0" class="mt-4 col-md-12">
+        <h2 class="h5 mb-3"><strong>Desglose de vuelto</strong></h2>
+        <div class="card p-3 bg-light" style="max-width: 400px">
+          <ul class="mb-0">
+            <p v-for="unit in filteredChange" :key="unit.value">
+              <strong
+                >{{ unit.quantity }} moneda{{
+                  unit.quantity > 1 ? "s" : ""
+                }}</strong
+              >: ₡{{ unit.value }}
+            </p>
+          </ul>
         </div>
       </div>
     </div>
@@ -132,6 +149,7 @@ export default {
         { label: "₡500", value: 500, quantity: 0 },
         { label: "₡1000", value: 1000, quantity: 0 },
       ],
+      change: [],
     };
   },
   computed: {
@@ -140,6 +158,9 @@ export default {
         (sum, unit) => sum + unit.quantity * unit.value,
         0
       );
+    },
+    filteredChange() {
+      return this.change.filter((unit) => unit.quantity > 0);
     },
   },
   methods: {
@@ -151,7 +172,7 @@ export default {
           selectedQty: 0,
         }));
       } catch (error) {
-        console.error("Error fetching the sodas", error);
+        console.error("Error fetching the sodas.", error);
       }
     },
     addToCart(soda) {
@@ -181,6 +202,29 @@ export default {
           return "fanta.png";
         case "Sprite":
           return "sprite.png";
+        default:
+          return "default.png";
+      }
+    },
+    createPaymentRequest() {
+      const payment = {
+        cashUnits: this.cashUnits
+          .filter((unit) => unit.quantity > 0)
+          .map(({ value, quantity }) => ({ value, quantity })),
+        sodas: this.cart.map(({ name, price, quantity }) => ({
+          name,
+          price,
+          quantity,
+        })),
+      };
+      this.createPayment(payment);
+    },
+    async createPayment(payment) {
+      try {
+        const response = await this.$api.completePayment(payment);
+        this.change = response.data;
+      } catch (error) {
+        console.error("Error creating payment.", error);
       }
     },
   },

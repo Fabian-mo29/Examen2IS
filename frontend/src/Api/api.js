@@ -8,6 +8,9 @@ export default {
       getSodasList() {
         return axios.get(`${baseApiUrl}/Soda`);
       },
+      completePayment(payment) {
+        return axios.post(`${baseApiUrl}/Payment`, payment);
+      },
     };
   },
 };
